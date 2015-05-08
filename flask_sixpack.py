@@ -24,6 +24,7 @@ class Sixpack(object):
         app.config.setdefault('SIXPACK_TIMEOUT', 0.5)
         app.config.setdefault('SIXPACK_COOKIE_NAME', 'sixpack_client_id')
         app.config.setdefault('SIXPACK_COOKIE_TIMEOUT', timedelta(days=365))
+        app.config.setdefault('SIXPACK_COOKIE_DOMAIN', app.config['SESSION_COOKIE_DOMAIN'])
 
         if hasattr(app, 'teardown_appcontext'):
             app.teardown_appcontext(self.teardown)
@@ -55,7 +56,8 @@ class Sixpack(object):
 
         response.set_cookie(self.app.config['SIXPACK_COOKIE_NAME'],
                             getattr(g, self.app.config['SIXPACK_COOKIE_NAME']),
-                            max_age=self.app.config['SIXPACK_COOKIE_TIMEOUT'])
+                            max_age=self.app.config['SIXPACK_COOKIE_TIMEOUT'],
+                            domain=self.app.config['SIXPACK_COOKIE_DOMAIN'])
         response.vary.add('Cookie')
         return response
 
